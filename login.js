@@ -1,76 +1,102 @@
-let form = document.querySelector("form");
-let username = document.querySelector("#username");
-let password = document.querySelector("#password");
-let submitBtn = document.querySelector("#submit");
-let loginBtn = document.querySelector("#login");
-let signupBtn = document.querySelector("#signup");
-
+let container = document.querySelector(".container");
 let loginPage = document.querySelector(".login-page");
-let accountPage = document.querySelector(".account-page");
+let singnupPage = document.querySelector(".signup-page");
+let homePage = document.querySelector(".home-page");
+let pages = document.querySelectorAll(".page");
+
+let tabsContainer = document.querySelector(".tabs-container");
+let loginTab = document.querySelector("#loginTab");
+let signupTab = document.querySelector("#signupTab");
+
+let signupForm = document.querySelector("#signup-form");
+let loginForm = document.querySelector("#login-form");
+
+let signupSubmit = document.querySelector("#signup-submit");
+let loginSubmit = document.querySelector("#login-submit");
+
 let welcomeMessage = document.querySelector("#welcome-message");
 let backToLoginPage = document.querySelector("#back-to-login");
+let links = document.querySelectorAll(`[data-anchor-id]`);
 
-backToLoginPage.addEventListener("click", () => {
-  loginPage.classList.toggle("hide");
-  accountPage.classList.toggle("hide");
+//initial render
+renderForm("1");
+
+//tab switching
+links.forEach((link) => {
+  link.addEventListener("click", () => {
+    renderForm(link.getAttribute("data-anchor-id"));
+  });
 });
 
-function showExisting(obj) {
-  alert(`Logged in as ${obj.username}`);
-}
-
-login.addEventListener("click", (e) => {
-  let userNameVal = username.value;
-  let passwordVal = password.value;
-  if (!(userNameVal && passwordVal)) {
-    alert("Fill all the fields");
-    return;
+tabsContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("tab")) {
+    let selectedTabId = e.target.getAttribute("data-tab-id");
+    renderForm(selectedTabId);
   }
+});
 
+//signup submit
+signupForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  if (checkUserAlreadyExists(userNameVal) == true) {
-    if (checkPassword(userNameVal, passwordVal) == true) {
-      redirectToHomePage("login", userNameVal);
-      form.reset();
+  let userObj = {
+    fullname: signupForm["fullname"].value,
+    email: signupForm["email"].value,
+    password: signupForm["password"].value,
+  };
+
+  console.log(userObj);
+
+  if (checkUserAlreadyExists(userObj) == true) {
+    alert("This email already in use . Please try a different one");
+    signupForm.reset();
+    return;
+  } else if (checkUserAlreadyExists(userObj) == false) {
+    createAccount(userObj);
+  }
+});
+
+//login submit
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  let userObj = {
+    email: loginForm["email"].value,
+    password: loginForm["password"].value,
+  };
+
+  console.log(userObj);
+  checkUserAlreadyExists(userObj);
+  if (checkUserAlreadyExists(userObj) == true) {
+    if (checkPassword(userObj) == true) {
+      console.log("MATCHEDDDD");
+      redirectToHomePage(
+        "login",
+        JSON.parse(localStorage.getItem(userObj.email)).fullname
+      );
     } else {
       alert("Wrong Password Please Try again");
-      password.value = "";
     }
   } else {
-    alert("This user does not exist , please sign up and create account");
+    alert(
+      "The user with this email does not exist , please sign up and create account"
+    );
   }
 });
 
-signup.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  if (!(username.value && password.value)) {
-    alert("Fill all the fields");
-    return;
-  }
-
-  if (checkUserAlreadyExists(username.value) == true) {
-    alert("This username already exists . Please try a different username");
-    form.reset();
-    return;
-  } else if (checkUserAlreadyExists(username.value) == false) {
-    createAccount({ username: username.value, password: password.value });
-  }
-});
-
-function checkUserAlreadyExists(username) {
-  if (localStorage.getItem(username)) {
+function checkUserAlreadyExists(userObj) {
+  if (localStorage.getItem(userObj.email)) {
     return true;
   } else {
     return false;
   }
 }
 
-function checkPassword(passedUsername, passedPassword) {
-  let userObj = JSON.parse(localStorage.getItem(passedUsername));
+function checkPassword(passedObj) {
+  console.log(passedObj);
+  let userObjLocal = JSON.parse(localStorage.getItem(passedObj.email));
 
-  if (userObj.password === passedPassword) {
+  if (userObjLocal.password === passedObj.password) {
     return true;
   } else {
     return false;
@@ -78,19 +104,34 @@ function checkPassword(passedUsername, passedPassword) {
 }
 
 function createAccount(obj) {
-  localStorage.setItem(obj.username, JSON.stringify(obj));
-  alert(`welcome ${obj.username} your account has been created `);
-  form.reset();
-  redirectToHomePage("signup", obj.username);
+  localStorage.setItem(obj.email, JSON.stringify(obj));
+  alert(`welcome ${obj.fullname} your account has been created `);
+  signupForm.reset();
+  redirectToHomePage("signup", obj.fullname);
+}
+
+function renderForm(tabId) {
+  pages.forEach((page) => {
+    if (page.getAttribute("data-page-id") !== tabId) {
+      page.classList.add("hide");
+    } else {
+      page.classList.remove("hide");
+    }
+  });
 }
 
 function redirectToHomePage(text, userNameVal) {
-  loginPage.classList.toggle("hide");
-  accountPage.classList.toggle("hide");
+  container.classList.toggle("hide");
+  homePage.classList.toggle("hide");
 
   if (text == "signup") {
-    welcomeMessage.textContent = `Hello ${userNameVal} 👋 , Welcome to the page , thanks for using our service `;
+    welcomeMessage.textContent = `Hello ${userNameVal} 👋 , Welcome to the Udemy `;
   } else if (text == "login") {
-    welcomeMessage.textContent = `Welcome back ${userNameVal}`;
+    welcomeMessage.textContent = `Welcome back ${userNameVal} , Let's Code`;
   }
 }
+
+backToLoginPage.addEventListener("click", () => {
+  container.classList.toggle("hide");
+  homePage.classList.toggle("hide");
+});

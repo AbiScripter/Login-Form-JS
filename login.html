@@ -10,21 +10,77 @@
     <link rel="stylesheet" href="login.css" />
   </head>
   <body>
-    <div class="login-page">
-      <h1>Login Form</h1>
-
-      <form>
-        <input type="text" required placeholder="Username" id="username" />
-        <input type="password" required id="password" placeholder="Password" />
-
+    <div class="container">
+      <div class="tabs-container">
+        <h1>Udemy</h1>
         <div>
-          <button id="login">Login</button>
-          <button id="signup">Sign Up</button>
+          <button class="loginTab tab" data-tab-id="1">Login</button>
+          <button class="signupTab tab" data-tab-id="2">Sign Up</button>
         </div>
-      </form>
+      </div>
+
+      <div class="pages-container">
+        <div class="login-page page hide" data-page-id="1">
+          <h2>Login</h2>
+
+          <form id="login-form">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Email"
+              id="login-email"
+            />
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="Password"
+              id="login-password"
+            />
+
+            <button type="submit" id="login-submit">Log In</button>
+          </form>
+
+          <p>Don't have an account? <a data-anchor-id="2"> SignUp</a></p>
+        </div>
+
+        <div class="signup-page page hide" data-page-id="2">
+          <h2>SignUp</h2>
+
+          <form id="signup-form">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Email"
+              id="signup-email"
+            />
+
+            <input
+              type="text"
+              name="fullname"
+              placeholder="Full name"
+              id="signup-fullname"
+              required
+            />
+
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="Password"
+              id="signup-password"
+            />
+            <button type="submit" id="signup-submit">Sign Up</button>
+          </form>
+
+          <p>Already have an account? <a data-anchor-id="1"> Log in</a></p>
+        </div>
+      </div>
     </div>
 
-    <div class="account-page hide">
+    <div class="home-page hide">
       <a id="back-to-login">Go back to Login page</a>
       <h2 id="welcome-message"></h2>
     </div>
