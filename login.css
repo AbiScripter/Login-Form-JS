@@ -1,0 +1,19 @@
+* {
+  font-family: "Open Sans", sans-serif;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.account-page.hide,
+.login-page.hide {
+  display: none;
+}
+
+a {
+  cursor: pointer;
+}

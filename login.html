@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LOGIN</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+    </style>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="login-page">
+      <h1>Login Form</h1>
+
+      <form>
+        <input type="text" required placeholder="Username" id="username" />
+        <input type="password" required id="password" placeholder="Password" />
+
+        <div>
+          <button id="login">Login</button>
+          <button id="signup">Sign Up</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="account-page hide">
+      <a id="back-to-login">Go back to Login page</a>
+      <h2 id="welcome-message"></h2>
+    </div>
+    <script src="login.js"></script>
+  </body>
+</html>
